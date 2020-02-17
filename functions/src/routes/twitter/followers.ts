@@ -18,10 +18,19 @@ twitterFollowersRouter.get('/', (req: Request, res: Response, next: NextFunction
   res.send('hello followers');
 });
 
-twitterFollowersRouter.get('/followers', async (req: Request, res: Response, next: NextFunction) => {
-  const frollowerIds = await twitter.get('followers/ids', { screen_name: 'taptappun' });
-  console.log(frollowerIds);
-  res.json(frollowerIds);
+twitterFollowersRouter.get('/only_followes', async (req: Request, res: Response, next: NextFunction) => {
+  const onlyFollowUserIds = [];
+  const followIdResponses = await twitter.get('friends/ids', { screen_name: 'taptappun', count: 5000 });
+  const followIds = followIdResponses.data as { [s: string]: any }
+  const followerIdResponses = await twitter.get('followers/ids', { screen_name: 'taptappun', count: 5000});
+  const followerIds = followerIdResponses.data as any[]
+  for(const followId of followIds.ids){
+    if(!followerIds.includes(followId)){
+      onlyFollowUserIds.push(followId);
+    }
+  }
+  console.log(onlyFollowUserIds.length)
+  res.json(onlyFollowUserIds);
 });
 
 export { twitterFollowersRouter };
