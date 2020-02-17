@@ -36,7 +36,19 @@ twitterCampaignsFollowersRouter.post('/followers/delete', (req: Request, res: Re
   res.send('hello followers');
 });
 
+twitterCampaignsFollowersRouter.post('/followers/tweet', (req: Request, res: Response, next: NextFunction) => {
+  res.send('hello followers');
+});
+
 twitterCampaignsFollowersRouter.post('/followers/lottery', (req: Request, res: Response, next: NextFunction) => {
+  res.send('hello followers');
+});
+
+twitterCampaignsFollowersRouter.post('/followers/extract', (req: Request, res: Response, next: NextFunction) => {
+  res.send('hello followers');
+});
+
+twitterCampaignsFollowersRouter.get('/followers/data_download', (req: Request, res: Response, next: NextFunction) => {
   res.send('hello followers');
 });
 
