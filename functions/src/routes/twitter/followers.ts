@@ -33,4 +33,12 @@ twitterFollowersRouter.get('/only_followes', async (req: Request, res: Response,
   res.json(onlyFollowUserIds);
 });
 
+twitterFollowersRouter.post('/protect_users', async (req: Request, res: Response, next: NextFunction) => {
+  res.send('hello followers');
+});
+
+twitterFollowersRouter.post('/unfollow_users', async (req: Request, res: Response, next: NextFunction) => {
+  res.send('hello followers');
+});
+
 export { twitterFollowersRouter };
