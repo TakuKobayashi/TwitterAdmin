@@ -20,6 +20,10 @@ const ORStyle = styled.section`
 `;
 
 export default function Login() {
+  const onClickButton = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    window.location.href = process.env.API_ROOT_URL + "/twitter/auth";
+  };
+
   return (
     <Auth title="Login" subTitle="Hello! Login with your Twitter Account!">
       <SEO title="Login" keywords={['Twitter', 'TwitterAdmin' , 'application', 'react']} />
@@ -30,7 +34,7 @@ export default function Login() {
         <ORStyle>
           <p>or</p>
         </ORStyle>
-        <Button status="Info" type="button" shape="SemiRound" fullWidth>
+        <Button status="Info" type="button" shape="SemiRound" onClick={onClickButton} fullWidth>
           Sign in with Twitter
         </Button>
       </form>
