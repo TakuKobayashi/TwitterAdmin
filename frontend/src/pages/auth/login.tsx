@@ -1,37 +1,39 @@
-import { InputGroup, Checkbox, Button } from 'oah-ui';
+import { InputGroup, Button } from 'oah-ui';
+import styled from 'styled-components';
 import React from 'react';
-import { Link } from 'gatsby';
 
-import Auth, { Group } from '../../components/Auth';
-import Socials from '../../components/Auth/Socials';
+import Auth from '../../components/Auth';
 import SEO from '../../components/SEO';
 
+const ORStyle = styled.section`
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+  .links {
+    font-size: 2.5rem;
+    a {
+      margin: 0 1rem;
+    }
+  }
+`;
+
 export default function Login() {
-  const onCheckbox = () => {
-    // v will be true or false
-  };
   return (
-    <Auth title="Login" subTitle="Hello! Login with your email">
-      <SEO title="Login" keywords={['OAH', 'application', 'react']} />
+    <Auth title="Login" subTitle="Hello! Login with your Twitter Account!">
+      <SEO title="Login" keywords={['Twitter', 'TwitterAdmin' , 'application', 'react']} />
       <form>
         <InputGroup fullWidth>
-          <input type="email" placeholder="Email Address" />
+          <input type="twittername" placeholder="Twitter Name" />
         </InputGroup>
-        <InputGroup fullWidth>
-          <input type="password" placeholder="Password" />
-        </InputGroup>
-        <Group>
-          <Checkbox onChange={onCheckbox}>Remember me</Checkbox>
-          <Link to="/auth/request-password">Forgot Password?</Link>
-        </Group>
-        <Button status="Success" type="button" shape="SemiRound" fullWidth>
-          Login
+        <ORStyle>
+          <p>or</p>
+        </ORStyle>
+        <Button status="Info" type="button" shape="SemiRound" fullWidth>
+          Sign in with Twitter
         </Button>
       </form>
-      <Socials />
-      <p>
-        Don&apos;t have account? <Link to="/auth/register">Register</Link>
-      </p>
     </Auth>
   );
 }
