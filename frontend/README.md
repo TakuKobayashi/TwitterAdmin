@@ -1,13 +1,15 @@
-# gatsby-starter-typescript
-The [default Gatsby starter](https://github.com/gatsbyjs/gatsby-starter-default) converted to [TypeScript](https://www.typescriptlang.org/).
+### OAH-Admin
 
-For an overview of the project structure please refer to the [Gatsby documentation - Building with Components](https://www.gatsbyjs.org/docs/building-with-components/)
+Admin dashboard template based on Gatsby with oah-ui component package
 
-Install this starter (assuming Gatsby is installed) by running from your CLI:
+#### Setup:
+
 ```
-gatsby new gatsby-starter-typescript https://github.com/haysclark/gatsby-starter-typescript
+git clone https://github.com/AhmedElywa/oah-admin.git
+
+cd oah-admin
+
+yarn install
+
+yarn dev
 ```
-
-## Deploy
-
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/haysclark/gatsby-starter-typescript)

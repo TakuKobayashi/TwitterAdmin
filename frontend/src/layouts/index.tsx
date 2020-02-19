@@ -1,70 +1,61 @@
-import * as React from 'react'
-import Link from 'gatsby-link'
-import Helmet from 'react-helmet'
+import React, { useState, useRef } from 'react';
+import { DefaultTheme, ThemeProvider } from 'styled-components';
+import themes from './themes';
+import {
+  Layout,
+  LayoutContent,
+  LayoutFooter,
+  LayoutContainer,
+  LayoutColumns,
+  LayoutColumn,
+  SidebarRefObject,
+} from 'oah-ui';
+import icons from 'oah-eva-icon';
 
-import './index.css'
+import Header from './Header';
+import SimpleLayout from './SimpleLayout';
+import SidebarCustom from './Sidebar';
 
-const Header = () => (
-  <div
-    style={{
-      background: 'rebeccapurple',
-      marginBottom: '1.45rem',
-    }}
-  >
-    <div
-      style={{
-        margin: '0 auto',
-        maxWidth: 960,
-        padding: '1.45rem 1.0875rem',
-      }}
-    >
-      <h1 style={{ margin: 0 }}>
-        <Link
-          to="/"
-          style={{
-            color: 'white',
-            textDecoration: 'none',
-          }}
-        >
-          Gatsby
-        </Link>
-      </h1>
-    </div>
-  </div>
-)
+const LayoutPage: React.FC<{ pageContext: { layout: string } }> = ({ children, pageContext }) => {
+  const [theme, setTheme] = useState<DefaultTheme['name']>('dark');
+  const [dir, setDir] = useState<'ltr' | 'rtl'>('ltr');
+  const sidebarRef = useRef<SidebarRefObject>(null);
 
-interface DefaultLayoutProps extends React.HTMLProps<HTMLDivElement> {
-  location: {
-    pathname: string
-  }
-  children: any
-}
+  const changeTheme = (newTheme: DefaultTheme['name']) => {
+    setTheme(newTheme);
+  };
 
-class DefaultLayout extends React.PureComponent<DefaultLayoutProps, void> {
-  public render() {
-    return (
-      <div>
-        <Helmet
-          title="Gatsby Default Starter"
-          meta={[
-            { name: 'description', content: 'Sample' },
-            { name: 'keywords', content: 'sample, something' },
-          ]}
-        />
-        <Header />
-        <div
-          style={{
-            margin: '0 auto',
-            maxWidth: 960,
-            padding: '0px 1.0875rem 1.45rem',
-            paddingTop: 0,
-          }}
-        >
-          {this.props.children()}
-        </div>
-      </div>
-    )
-  }
-}
+  const changeDir = () => {
+    const newDir = dir === 'ltr' ? 'rtl' : 'ltr';
+    setDir(newDir);
+  };
 
-export default DefaultLayout
+  return (
+    <ThemeProvider theme={themes(theme, dir)}>
+      <>
+        <SimpleLayout />
+        <Layout evaIcons={icons} dir={dir} windowMode className={pageContext.layout === 'auth' ? 'auth-layout' : ''}>
+          {pageContext.layout !== 'auth' && (
+            <Header
+              dir={dir}
+              changeDir={changeDir}
+              changeTheme={changeTheme}
+              toggleSidebar={() => sidebarRef.current?.toggle()}
+            />
+          )}
+          <LayoutContainer>
+            {pageContext.layout !== 'auth' && <SidebarCustom ref={sidebarRef} />}
+            <LayoutContent>
+              <LayoutColumns>
+                <LayoutColumn className="main-content">{children}</LayoutColumn>
+              </LayoutColumns>
+              {pageContext.layout !== 'auth' && <LayoutFooter>Footer</LayoutFooter>}
+            </LayoutContent>
+          </LayoutContainer>
+        </Layout>
+      </>
+    </ThemeProvider>
+  );
+};
+
+export default LayoutPage;
