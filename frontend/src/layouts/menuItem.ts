@@ -160,6 +160,11 @@ const items: MenuItemType[] = [
       },
     ],
   },
+  {
+    title: 'follower',
+    icon: { name: 'people-outline' },
+    link: { to: '/follow/only-follow-list' },
+  },
 ];
 
 export default items;
