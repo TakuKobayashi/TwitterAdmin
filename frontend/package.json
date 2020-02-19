@@ -1,7 +1,7 @@
 {
   "name": "twitter-admin",
   "private": true,
-  "description": "Admin dashboard template based on Gatsby with oah-ui component package",
+  "description": "Twitter Admin dashboard and Supporting Market tools",
   "version": "0.1.0",
   "author": "TakuKobayashi",
   "dependencies": {
@@ -31,7 +31,8 @@
     "react",
     "component",
     "styled",
-    "oah"
+    "oah",
+    "twitter"
   ],
   "license": "MIT",
   "scripts": {

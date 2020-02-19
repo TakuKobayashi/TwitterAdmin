@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/camelcase */
 module.exports = {
   siteMetadata: {
-    title: 'OAH-Admin',
-    description: 'Admin dashboard template based on Gatsby with oah-ui component package.',
-    author: 'OAH Technology',
+    title: 'TwitterAdmin',
+    description: 'Twitter Admin dashboard and Supporting Market tools',
+    author: 'TakuKobayashi',
   },
   plugins: [
     'gatsby-plugin-styled-components',
@@ -21,8 +21,8 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-manifest',
       options: {
-        name: 'oah-admin',
-        short_name: 'OAH',
+        name: 'TwitterAdmin',
+        short_name: 'TA',
         start_url: '/dashboard',
         display: 'minimal-ui',
         icon: 'src/images/OAH.png', // This path is relative to the root of the site.
