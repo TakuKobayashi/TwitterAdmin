@@ -11,6 +11,7 @@ import {
   SidebarRefObject,
 } from 'oah-ui';
 import icons from 'oah-eva-icon';
+import { useCookies } from 'react-cookie';
 
 import Header from './Header';
 import SimpleLayout from './SimpleLayout';
@@ -29,6 +30,14 @@ const LayoutPage: React.FC<{ pageContext: { layout: string } }> = ({ children, p
     const newDir = dir === 'ltr' ? 'rtl' : 'ltr';
     setDir(newDir);
   };
+
+  const [cookies, setCookie, removeCookie] = useCookies(['twitterUser']);
+  if (cookies.twitterUserId && cookies.twitterScreenName) {
+    window.localStorage.setItem('twitterUserId', cookies.twitterUserId);
+    window.localStorage.setItem('twitterScreenName', cookies.twitterScreenName);
+    removeCookie('twitterUserId');
+    removeCookie('twitterScreenName');
+  }
 
   return (
     <ThemeProvider theme={themes(theme, dir)}>

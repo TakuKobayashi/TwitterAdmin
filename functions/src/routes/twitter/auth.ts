@@ -48,7 +48,7 @@ twitterAuthRouter.get('/callback', async (req: Request, res: Response, next: Nex
   res.cookie('twitterScreenName', accessTokenData.screen_name);  
   res.clearCookie('redirectorigin');
   //{"oauth_token":"...","oauth_token_secret":"...","user_id":"...","screen_name":"..."}
-  res.redirect(cookies.redirectorigin + '/dashboard');
+  res.redirect(cookies.redirectorigin);
 });
 
 function requestTokenTwitterParams(): { [s: string]: string } {
