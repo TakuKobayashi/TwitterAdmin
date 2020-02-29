@@ -5,19 +5,15 @@ import { useCookies } from 'react-cookie';
 
 const Home = () => {
   const [cookies, setCookie, removeCookie] = useCookies(['twitterUser']);
-  if(cookies.twitterUserId){
+  if (cookies.twitterUserId) {
     window.localStorage.setItem('twitterUserId', cookies.twitterUserId);
-    removeCookie("twitterUserId");
+    removeCookie('twitterUserId');
   }
 
   return (
     <div>
       <SEO title="Home" keywords={['Twitter', 'Admim']} />
-      <TwitterTimelineEmbed
-        sourceType="profile"
-        screenName="taptappun"
-        options={{height: 400}}
-      />
+      <TwitterTimelineEmbed sourceType="profile" screenName="taptappun" options={{ height: 400 }} />
     </div>
   );
 };

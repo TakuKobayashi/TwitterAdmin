@@ -21,12 +21,12 @@ const ORStyle = styled.section`
 
 export default function Login() {
   const onClickButton = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    window.location.href = process.env.API_ROOT_URL + "/twitter/auth/login?origin=" + window.location.origin;
+    window.location.href = process.env.API_ROOT_URL + '/twitter/auth/login?origin=' + window.location.origin;
   };
 
   return (
     <Auth title="Login" subTitle="Hello! Login with your Twitter Account!">
-      <SEO title="Login" keywords={['Twitter', 'TwitterAdmin' , 'application', 'react']} />
+      <SEO title="Login" keywords={['Twitter', 'TwitterAdmin', 'application', 'react']} />
       <form>
         <InputGroup fullWidth>
           <input type="twittername" placeholder="Twitter Name" />

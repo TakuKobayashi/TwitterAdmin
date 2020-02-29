@@ -14,11 +14,11 @@ twitterAuthRouter.get('/', (req: Request, res: Response, next: NextFunction) => 
 
 twitterAuthRouter.get('/login', async (req: Request, res: Response, next: NextFunction) => {
   const origin = req.query.origin;
-  if(origin){
+  if (origin) {
     res.cookie('redirectorigin', origin);
-  }else{
+  } else {
     res.status(400);
-    res.json({message: "origin query is invalid."});
+    res.json({ message: 'origin query is invalid.' });
     return;
   }
   const params = requestTokenTwitterParams();
@@ -47,7 +47,7 @@ twitterAuthRouter.get('/callback', async (req: Request, res: Response, next: Nex
   res.cookie('twitterUserId', accessTokenData.user_id);
   res.clearCookie('redirectorigin');
   //{"oauth_token":"...","oauth_token_secret":"...","user_id":"...","screen_name":"..."}
-  res.redirect(cookies.redirectorigin + "/dashboard");
+  res.redirect(cookies.redirectorigin + '/dashboard');
 });
 
 function requestTokenTwitterParams(): { [s: string]: string } {

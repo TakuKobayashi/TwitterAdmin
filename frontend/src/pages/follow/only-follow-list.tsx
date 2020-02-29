@@ -3,16 +3,16 @@ import React, { useState, useEffect } from 'react';
 import SEO from '../../components/SEO';
 
 const OnlyFollowListPage = () => {
-  const [followers, setFollowers] = useState(0)
+  const [followers, setFollowers] = useState(0);
   useEffect(() => {
     // get data from GitHub api
     fetch(`https://api.github.com/repos/gatsbyjs/gatsby`)
       .then(response => response.json()) // parse JSON from request
       .then(resultData => {
         console.log(resultData);
-        setFollowers(resultData.stargazers_count)
-      }) // set data for the number of stars
-  }, [])
+        setFollowers(resultData.stargazers_count);
+      }); // set data for the number of stars
+  }, []);
   const userList = [
     { name: 'Carla Espinosa', title: 'Nurse' },
     { name: 'Bob Kelso', title: 'Doctor of Medicine' },

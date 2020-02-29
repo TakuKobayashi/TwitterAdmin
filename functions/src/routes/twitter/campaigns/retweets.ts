@@ -52,5 +52,4 @@ twitterCampaignsRetweetsRouter.get('/retweets/data_download', (req: Request, res
   res.send('hello followers');
 });
 
-
 export { twitterCampaignsRetweetsRouter };

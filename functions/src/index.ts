@@ -26,4 +26,3 @@ app.get('/', (req, res) => {
 export const api = region('asia-northeast1').https.onRequest(app);
 
 export default app;
-

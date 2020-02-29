@@ -43,7 +43,8 @@
     "start": "npm run develop",
     "serve": "gatsby serve",
     "deploy": "gatsby build && gh-pages -d public",
-    "test": "echo \"Write tests! -> https://gatsby.app/unit-testing\""
+    "test": "echo \"Write tests! -> https://gatsby.app/unit-testing\"",
+    "format": "prettier --config .prettierrc.js --write 'src/**/*.{ts,js,tsx,jsx}'"
   },
   "devDependencies": {
     "@types/node": "^13.1.2",
