@@ -1,17 +1,22 @@
 import { Row, Col, Card, List, ListItem, User } from 'oah-ui';
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import SEO from '../../components/SEO';
 
 const OnlyFollowListPage = () => {
   const [followers, setFollowers] = useState(0);
   useEffect(() => {
-    // get data from GitHub api
-    fetch(`https://api.github.com/repos/gatsbyjs/gatsby`)
-      .then(response => response.json()) // parse JSON from request
-      .then(resultData => {
-        console.log(resultData);
-        setFollowers(resultData.stargazers_count);
-      }); // set data for the number of stars
+    const requestFunc = async () => {
+      const response = await axios.get(process.env.API_ROOT_URL + '/twitter/followers/only_follows', {
+        headers: {
+          twitterscreenname: window.localStorage.getItem('twitterScreenName'),
+        },
+      }).catch(err => {
+        console.log(err);
+      });
+      console.log(response.data);
+    };
+    requestFunc();
   }, []);
   const userList = [
     { name: 'Carla Espinosa', title: 'Nurse' },

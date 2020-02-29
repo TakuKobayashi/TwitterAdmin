@@ -1,10 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
+import { DynamoDBORM } from 'node-dynamodb-orm';
 import axios from 'axios';
 
 const crypto = require('crypto');
 const express = require('express');
 const twitterAuthRouter = express.Router();
 const querystring = require('querystring');
+
+const twitterAdminType = ['twitter', 'twitteradmin'].join(':');
 
 const twitterRequestTokenUrl = 'https://api.twitter.com/oauth/request_token';
 
@@ -39,6 +42,7 @@ twitterAuthRouter.get('/login', async (req: Request, res: Response, next: NextFu
 });
 
 twitterAuthRouter.get('/callback', async (req: Request, res: Response, next: NextFunction) => {
+  const accountsTable = new DynamoDBORM('accounts');
   const response = await axios.post('https://api.twitter.com/oauth/access_token?', sortJoinParamsString(req.query, '&')).catch((err) => {
     res.send('error');
   });
@@ -48,7 +52,18 @@ twitterAuthRouter.get('/callback', async (req: Request, res: Response, next: Nex
   res.cookie('twitterScreenName', accessTokenData.screen_name);  
   res.clearCookie('redirectorigin');
   //{"oauth_token":"...","oauth_token_secret":"...","user_id":"...","screen_name":"..."}
-  res.redirect(cookies.redirectorigin);
+  const accountData = {
+    account_type: twitterAdminType,
+    uid: accessTokenData.user_id,
+    screen_name: accessTokenData.screen_name,
+    access_token: accessTokenData.oauth_token,
+    access_token_secret: accessTokenData.oauth_token_secret,
+  }
+  accountsTable.create(accountData).then(account => {
+    res.redirect(cookies.redirectorigin);
+  }).catch(err => {
+    res.redirect(cookies.redirectorigin);
+  });
 });
 
 function requestTokenTwitterParams(): { [s: string]: string } {
