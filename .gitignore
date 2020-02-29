@@ -8,3 +8,11 @@ node_modules
 yarn-error.log
 firebase-debug.log
 .env
+**/.dynamodb/
+
+## Compiled JavaScript files
+**/*.js
+**/*.js.map
+
+# Typescript v1 declaration files
+typings/

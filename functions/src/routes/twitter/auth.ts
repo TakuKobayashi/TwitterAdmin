@@ -1,8 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import axios from 'axios';
 
-require('dotenv').config();
-
 const crypto = require('crypto');
 const express = require('express');
 const twitterAuthRouter = express.Router();
@@ -14,7 +12,7 @@ twitterAuthRouter.get('/', (req: Request, res: Response, next: NextFunction) => 
   res.send('hello auth');
 });
 
-twitterAuthRouter.get('/auth', async (req: Request, res: Response, next: NextFunction) => {
+twitterAuthRouter.get('/login', async (req: Request, res: Response, next: NextFunction) => {
   const params = requestTokenTwitterParams();
   const signatureString = signature(encodeURIComponent(sortJoinParamsString(params, '&')));
   params.oauth_signature = encodeURIComponent(signatureString);
@@ -45,7 +43,7 @@ function requestTokenTwitterParams(): { [s: string]: string } {
   const date = new Date();
   const results: { [s: string]: string } = {};
   const params: { [s: string]: string | number | boolean } = {
-    oauth_callback: 'http://localhost:3000/twitter/account/callback',
+    oauth_callback: 'http://localhost:3000/twitter/auth/callback',
     oauth_consumer_key: process.env.TWITTER_CONSUMER_KEY!,
     oauth_signature_method: 'HMAC-SHA1',
     oauth_timestamp: Math.floor(date.getTime() / 1000),
