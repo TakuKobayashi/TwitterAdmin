@@ -45,6 +45,7 @@ twitterAuthRouter.get('/callback', async (req: Request, res: Response, next: Nex
   const accessTokenData = querystring.parse(response.data);
   const cookies = req.cookies;
   res.cookie('twitterUserId', accessTokenData.user_id);
+  res.cookie('twitterScreenName', accessTokenData.screen_name);  
   res.clearCookie('redirectorigin');
   //{"oauth_token":"...","oauth_token_secret":"...","user_id":"...","screen_name":"..."}
   res.redirect(cookies.redirectorigin + '/dashboard');
