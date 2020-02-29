@@ -21,7 +21,7 @@ const ORStyle = styled.section`
 
 export default function Login() {
   const onClickButton = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    window.location.href = process.env.API_ROOT_URL + "/twitter/auth";
+    window.location.href = process.env.API_ROOT_URL + "/twitter/auth/login?origin=" + window.location.origin;
   };
 
   return (
