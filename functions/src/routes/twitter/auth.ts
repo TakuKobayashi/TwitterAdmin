@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 import { DynamoDBORM } from 'node-dynamodb-orm';
+import { setupTwit } from '../../common/setup-twit';
+import { twitterAdminType } from '../../common/base-request';
 import axios from 'axios';
 
 const crypto = require('crypto');
 const express = require('express');
 const twitterAuthRouter = express.Router();
 const querystring = require('querystring');
-
-const twitterAdminType = ['twitter', 'twitteradmin'].join(':');
 
 const twitterRequestTokenUrl = 'https://api.twitter.com/oauth/request_token';
 
@@ -44,26 +44,30 @@ twitterAuthRouter.get('/login', async (req: Request, res: Response, next: NextFu
 twitterAuthRouter.get('/callback', async (req: Request, res: Response, next: NextFunction) => {
   const accountsTable = new DynamoDBORM('accounts');
   const response = await axios.post('https://api.twitter.com/oauth/access_token?', sortJoinParamsString(req.query, '&')).catch((err) => {
-    res.send('error');
+    next(err);
   });
   const accessTokenData = querystring.parse(response.data);
   const cookies = req.cookies;
   res.cookie('twitterUserId', accessTokenData.user_id);
-  res.cookie('twitterScreenName', accessTokenData.screen_name);  
+  res.cookie('twitterScreenName', accessTokenData.screen_name);
   res.clearCookie('redirectorigin');
   //{"oauth_token":"...","oauth_token_secret":"...","user_id":"...","screen_name":"..."}
+  const twitter = setupTwit({ access_token: accessTokenData.oauth_token, access_token_secret: accessTokenData.oauth_token_secret });
+  const twitterUserResponse = await twitter.get('users/show', { user_id: accessTokenData.user_id });
+  const twitterUser = twitterUserResponse.data;
   const accountData = {
     account_type: twitterAdminType,
     uid: accessTokenData.user_id,
     screen_name: accessTokenData.screen_name,
     access_token: accessTokenData.oauth_token,
     access_token_secret: accessTokenData.oauth_token_secret,
-  }
-  accountsTable.create(accountData).then(account => {
-    res.redirect(cookies.redirectorigin);
-  }).catch(err => {
-    res.redirect(cookies.redirectorigin);
-  });
+    followers_count: twitterUser.followers_count,
+    follows_count: twitterUser.friends_count,
+    profile_url: twitterUser.url,
+    profile_image_url: twitterUser.profile_image_url_https,
+  };
+  await accountsTable.create(accountData);
+  res.redirect(cookies.redirectorigin);
 });
 
 function requestTokenTwitterParams(): { [s: string]: string } {

@@ -3,7 +3,7 @@ service:
 
 resources:
   Resources:
-    usersTable:
+    AccountsTable:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: accounts
@@ -20,6 +20,23 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 5
           WriteCapacityUnits: 5
+    AccountRelationsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: account_relations
+        AttributeDefinitions:
+          - AttributeName: uid
+            AttributeType: S
+          - AttributeName: touid
+            AttributeType: S
+        KeySchema:
+          - AttributeName: uid
+            KeyType: HASH
+          - AttributeName: touid
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
 
 custom:
   webpack:
