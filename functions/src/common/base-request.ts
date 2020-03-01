@@ -20,26 +20,24 @@ export async function authTwitterUser(req: Request, res: Response, next: NextFun
   }
   const accountsTable = new DynamoDBORM('accounts');
   const uid = req.headers.twitteruserid;
-  let twitterAccount;
   if (uid) {
-    twitterAccount = await accountsTable.findBy({ account_type: twitterAdminType, uid: uid });
+    const twitterAccount = await accountsTable.findBy({ account_type: twitterAdminType, uid: uid });
+    const twitter = setupTwit({ access_token: twitterAccount.access_token, access_token_secret: twitterAccount.access_token_secret });
+    res.locals.twitterAccount = twitterAccount;
+    res.locals.twitter = twitter;
   } else {
     const screenName = req.headers.twitterscreenname;
     if (!screenName) {
       res.status(400);
       res.json({ message: 'unknown twitter account' });
-      next();
       return;
     }
     const twitter = setupTwit({ app_only_auth: true });
     const twitterUserResponse = await twitter.get('users/show', { screen_name: screenName });
     const twitterUser = twitterUserResponse.data;
-    twitterAccount = await accountsTable.findBy({ account_type: twitterAdminType, uid: twitterUser.id_str });
-  }
-  if (twitterAccount) {
+    const twitterAccount = await accountsTable.findBy({ account_type: twitterAdminType, uid: twitterUser.id_str });
     res.locals.twitterAccount = twitterAccount;
-    next();
-  } else {
-    res.redirect('/twitter/auth/login');
+    res.locals.twitter = twitter;
   }
+  next();
 }

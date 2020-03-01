@@ -20,7 +20,7 @@ twitterFollowersRouter.get('/', async (req: Request, res: Response, next: NextFu
 twitterFollowersRouter.get('/only_follows', async (req: Request, res: Response, next: NextFunction) => {
   const onlyFollowUserIds = [];
   const twitterAccount = res.locals.twitterAccount;
-  const twitter = setupTwit({ access_token: twitterAccount.access_token, access_token_secret: twitterAccount.access_token_secret });
+  const twitter = res.locals.twitter;
   const followIdResponses = await twitter.get('friends/ids', { user_id: twitterAccount.uid, count: 5000 });
   const followsData = followIdResponses.data as { [s: string]: any };
   const followIds: number[] = followsData.ids;

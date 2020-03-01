@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { DynamoDBORM } from 'node-dynamodb-orm';
 import { setupTwit } from '../../common/setup-twit';
 import { twitterAdminType } from '../../common/base-request';
+import { AccountStates } from '../../common/enums/account-states';
 import axios from 'axios';
 
 const crypto = require('crypto');
@@ -41,6 +42,24 @@ twitterAuthRouter.get('/login', async (req: Request, res: Response, next: NextFu
   res.redirect('https://api.twitter.com/oauth/authenticate?oauth_token=' + token);
 });
 
+twitterAuthRouter.post('/login_from_screen_name', async (req: Request, res: Response, next: NextFunction) => {
+  const twitter = setupTwit({ app_only_auth: true });
+  const twitterUserResponse = await twitter.get('users/show', { screen_name: req.body.screen_name });
+  const twitterUser = twitterUserResponse.data;
+  const accountData = {
+    account_type: twitterAdminType,
+    uid: twitterUser.id_str,
+    account_state: AccountStates.stakeholders,
+    screen_name: twitterUser.screen_name,
+    followers_count: twitterUser.followers_count,
+    follows_count: twitterUser.friends_count,
+    profile_url: twitterUser.url,
+    profile_image_url: twitterUser.profile_image_url_https,
+  };
+  const account = await accountsTable.create(accountData);
+  res.json(account);
+});
+
 twitterAuthRouter.get('/callback', async (req: Request, res: Response, next: NextFunction) => {
   const accountsTable = new DynamoDBORM('accounts');
   const response = await axios.post('https://api.twitter.com/oauth/access_token?', sortJoinParamsString(req.query, '&')).catch((err) => {
@@ -58,6 +77,7 @@ twitterAuthRouter.get('/callback', async (req: Request, res: Response, next: Nex
   const accountData = {
     account_type: twitterAdminType,
     uid: accessTokenData.user_id,
+    account_state: AccountStates.members,
     screen_name: accessTokenData.screen_name,
     access_token: accessTokenData.oauth_token,
     access_token_secret: accessTokenData.oauth_token_secret,
