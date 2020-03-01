@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { DynamoDBORM } from 'node-dynamodb-orm';
-import { setupTwit } from '../../common/setup-twit';
-import { twitterAdminType } from '../../common/base-request';
+import { twitterAdminType } from '../../common/twitter';
 
 const express = require('express');
 const twitterFollowersRouter = express.Router();

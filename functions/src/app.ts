@@ -4,7 +4,7 @@ import { APIGatewayEvent, APIGatewayProxyHandler, Context } from 'aws-lambda';
 import * as awsServerlessExpress from 'aws-serverless-express';
 import * as express from 'express';
 
-import { authTwitterUser } from './common/base-request';
+import { authTwitterUser } from './common/base-middleware';
 import { twitterAuthRouter } from './routes/twitter/auth';
 import { twitterFollowersRouter } from './routes/twitter/followers';
 import { twitterCampaignsFollowersRouter } from './routes/twitter/campaigns/followers';
@@ -15,7 +15,10 @@ const app = express();
 const server = awsServerlessExpress.createServer(app);
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 app.use(cookieParser());
 app.use(cors({ origin: true }));
 

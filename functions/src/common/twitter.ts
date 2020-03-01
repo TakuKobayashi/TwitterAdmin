@@ -1,5 +1,7 @@
 import * as Twit from 'twit';
 
+export const twitterAdminType = ['twitter', 'twitteradmin'].join(':');
+
 export function setupTwit(extToken: { [s: string]: any }): Twit {
   const twitter = new Twit({
     consumer_key: process.env.TWITTER_CONSUMER_KEY!,

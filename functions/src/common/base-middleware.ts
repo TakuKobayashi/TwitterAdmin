@@ -1,17 +1,6 @@
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { DynamoDBORM } from 'node-dynamodb-orm';
-import { setupTwit } from './setup-twit';
-import * as Twit from 'twit';
-
-export const twitterAdminType = ['twitter', 'twitteradmin'].join(':');
-
-interface PromiseRequestHandler {
-  (req: Request, res: Response, next: NextFunction): Promise<any>;
-}
-
-function wrap(fn: PromiseRequestHandler): RequestHandler {
-  return (req, res, next) => fn(req, res, next).catch(next);
-}
+import { twitterAdminType, setupTwit } from './twitter';
 
 export async function authTwitterUser(req: Request, res: Response, next: NextFunction) {
   if (req.originalUrl.startsWith('/twitter/auth/')) {

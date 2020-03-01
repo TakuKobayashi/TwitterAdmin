@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { DynamoDBORM } from 'node-dynamodb-orm';
-import { setupTwit } from '../../common/setup-twit';
-import { twitterAdminType } from '../../common/base-request';
+import { setupTwit, twitterAdminType } from '../../common/twitter';
 import { AccountStates } from '../../common/enums/account-states';
 import axios from 'axios';
 
