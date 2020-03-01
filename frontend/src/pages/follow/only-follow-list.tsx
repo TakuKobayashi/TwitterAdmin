@@ -12,7 +12,6 @@ const OnlyFollowListPage = () => {
 
   const [followers, setFollowers] = useState(0);
   useEffect(() => {
-    /*
     const requestFunc = async () => {
       const response = await axios.get(process.env.API_ROOT_URL + '/twitter/followers/only_follows', {
         headers: {
@@ -24,7 +23,6 @@ const OnlyFollowListPage = () => {
       console.log(response.data);
     };
     requestFunc();
-    */
   }, []);
   const userList = [
     { name: 'Carla Espinosa', title: 'Nurse' },

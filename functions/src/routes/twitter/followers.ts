@@ -37,7 +37,7 @@ twitterFollowersRouter.get('/only_follows', async (req: Request, res: Response, 
     uid: twitterAccount.uid
   }, {
     followers_count: twitterUser.data.followers_count,
-    friends_count: twitterUser.data.friends_count,
+    follows_count: twitterUser.data.friends_count,
     profile_url: twitterUser.data.url,
     profile_image_url: twitterUser.data.profile_image_url_https,
   })
@@ -53,6 +53,8 @@ twitterFollowersRouter.get('/only_follows', async (req: Request, res: Response, 
       onlyFollowUserIds.push(followId);
     }
   }
+  const users = await twitter.get('users/lookup', { user_id: onlyFollowUserIds.join(",") });
+  console.log(users.data);
   res.json({twitterIds: onlyFollowUserIds});
 });
 
