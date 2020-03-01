@@ -24,8 +24,24 @@ twitterFollowersRouter.get('/only_follows', async (req: Request, res: Response, 
     res.json({ message: 'unknown twitter account' });
     return;
   }
+  const accountsTable = new DynamoDBORM('accounts');
+  //accountsTable.update(accountData)
   const onlyFollowUserIds = [];
   const twitter = setupTwit({app_only_auth: true});
+  const twitterUser = await twitter.get('users/show', { screen_name: screenName });
+  console.log(twitterUser.data);
+  const twitterAccount = await accountsTable.findBy({account_type: twitterAdminType, uid: twitterUser.data.id_str});
+  console.log(twitterAccount);
+  const updated = await accountsTable.update({
+    account_type: twitterAccount.account_type,
+    uid: twitterAccount.uid
+  }, {
+    followers_count: twitterUser.data.followers_count,
+    friends_count: twitterUser.data.friends_count,
+    profile_url: twitterUser.data.url,
+    profile_image_url: twitterUser.data.profile_image_url_https,
+  })
+  console.log(updated);
   const followIdResponses = await twitter.get('friends/ids', { screen_name: screenName, count: 5000 });
   const followsData = followIdResponses.data as { [s: string]: any };
   const followIds: number[] = followsData.ids;
