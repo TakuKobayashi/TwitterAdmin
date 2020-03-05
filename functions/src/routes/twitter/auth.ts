@@ -10,6 +10,7 @@ const twitterAuthRouter = express.Router();
 const querystring = require('querystring');
 
 const twitterRequestTokenUrl = 'https://api.twitter.com/oauth/request_token';
+const oauthCallbackUrl = 'http://localhost:3000/twitter/auth/callback';
 
 twitterAuthRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
   res.send('hello auth');
@@ -93,7 +94,7 @@ function requestTokenTwitterParams(): { [s: string]: string } {
   const date = new Date();
   const results: { [s: string]: string } = {};
   const params: { [s: string]: string | number | boolean } = {
-    oauth_callback: 'http://localhost:3000/twitter/auth/callback',
+    oauth_callback: oauthCallbackUrl,
     oauth_consumer_key: process.env.TWITTER_CONSUMER_KEY!,
     oauth_signature_method: 'HMAC-SHA1',
     oauth_timestamp: Math.floor(date.getTime() / 1000),
