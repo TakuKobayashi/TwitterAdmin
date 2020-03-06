@@ -18,22 +18,48 @@ twitterFollowersRouter.get('/', async (req: Request, res: Response, next: NextFu
 
 twitterFollowersRouter.get('/only_follows', async (req: Request, res: Response, next: NextFunction) => {
   const onlyFollowUserIds = [];
+  const follow_cursor = req.query.follow_cursor || -1;
+  const follower_cursor = req.query.follower_cursor || -1;
   const twitterAccount = res.locals.twitterAccount;
   const twitter = res.locals.twitter;
-  const followIdResponses = await twitter.get('friends/ids', { user_id: twitterAccount.uid, count: 5000 });
+  const followIdResponses = await twitter.get('friends/ids', {
+    user_id: twitterAccount.uid,
+    count: 5000,
+    cursor: follow_cursor,
+    stringify_ids: true,
+  });
   const followsData = followIdResponses.data as { [s: string]: any };
-  const followIds: number[] = followsData.ids;
-  const followerIdResponses = await twitter.get('followers/ids', { user_id: twitterAccount.uid, count: 5000 });
+  const followIds: string[] = followsData.ids;
+  const followerIdResponses = await twitter.get('followers/ids', {
+    user_id: twitterAccount.uid,
+    count: 5000,
+    cursor: follower_cursor,
+    stringify_ids: true,
+  });
   const followersData = followerIdResponses.data as { [s: string]: any };
-  const followerIds: number[] = followersData.ids;
+  const followerIds: string[] = followersData.ids;
   for (const followId of followIds) {
     if (!followerIds.includes(followId)) {
       onlyFollowUserIds.push(followId);
     }
   }
-  //  const users = await twitter.get('users/lookup', { user_id: onlyFollowUserIds.join(',') });
-  //  console.log(users.data);
-  res.json({ twitterIds: onlyFollowUserIds });
+
+  res.json({
+    twitterIds: onlyFollowUserIds,
+    follow_next_cursor: followsData.next_cursor,
+    follower_next_cursor: followersData.next_cursor,
+    follow_previous_cursor: followsData.previous_cursor,
+    follower_previous_cursor: followersData.previous_cursor,
+  });
+});
+
+twitterFollowersRouter.post('/lookup_users', async (req: Request, res: Response, next: NextFunction) => {
+  const twitterUserIds = req.body.twitterUserIds.split(',');
+  const users = await twitter.get('users/lookup', { user_id: twitterUserIds.join(',') });
+  console.log(users.data);
+  res.json({
+    users: users,
+  });
 });
 
 twitterFollowersRouter.post('/protect_users', async (req: Request, res: Response, next: NextFunction) => {
