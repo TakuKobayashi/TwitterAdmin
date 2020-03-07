@@ -54,6 +54,7 @@ twitterFollowersRouter.get('/only_follows', async (req: Request, res: Response, 
 });
 
 twitterFollowersRouter.post('/lookup_users', async (req: Request, res: Response, next: NextFunction) => {
+  const twitter = res.locals.twitter;
   const twitterUserIds = req.body.twitterUserIds.split(',');
   const users = await twitter.get('users/lookup', { user_id: twitterUserIds.join(',') });
   console.log(users.data);
